@@ -21,29 +21,36 @@ body {
 }
 
 h1,
-h2 {
+h2,
+p {
   color: #ffffff;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
+h1 {
+  font-size: 18px;
+}
+
+h2 {
+  font-size: 14px;
+}
+
 svg {
   display: block;
-  width: 100%;
+  width: 80%;
   height: auto;
   margin: auto;
 }
 
 /* Bars */
 .dot {
-  fill: #3498db;
   transition: fill 0.3s ease-in-out;
 }
 
 .dot:hover {
-  fill: #e74c3c;
+  fill: green;
 }
-
 /* Tooltip */
 #tooltip {
   position: absolute;
@@ -60,7 +67,7 @@ svg {
 /* Responsive */
 @media (max-width: 900px) {
   svg {
-    width: 100%;
+    width: 80%;
   }
 }
 

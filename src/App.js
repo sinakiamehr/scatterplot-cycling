@@ -44,7 +44,7 @@ function App() {
       .attr("height", "100%")
       .attr("viewBox", `0 0 ${width} ${height}`)
       .attr("preserveAspectRatio", "xMidYMid meet")
-      .style("background", "#1e1e1e");
+      .style("background", "#darkgrey");
 
     svg.selectAll("*").remove();
 
@@ -91,14 +91,18 @@ function App() {
         )
       )
       .attr("r", 6)
-      .attr("fill", "#3498db")
+      .attr("fill", (d) => (d.Doping ? "#e74c3c" : "#3498db"))
       .on("mouseover", (event, d) => {
         d3.select(tooltipRef.current)
           .style("opacity", 1)
           .style("left", event.pageX + 10 + "px")
           .style("top", event.pageY - 30 + "px")
           .attr("data-year", new Date(d.Year, 0, 1))
-          .html(`Date: ${d.Year}<br>Time: ${d.Time}`);
+          .html(
+            `Year: ${d.Year}<br>Time: ${d.Time}<br>${
+              d.Doping ? d.Doping : "No Doping Allegations"
+            }`
+          );
       })
       .on("mouseout", () => {
         d3.select(tooltipRef.current).style("opacity", 0);
@@ -112,8 +116,10 @@ function App() {
       .attr("id", "title")
       .style("font-weight", "bold")
       .style("font-size", "1.5em")
+      .style("fill", "white")
       .text("Tour de France Time vs Year");
 
+    //creating Axis
     const xAxis = d3.axisBottom(xScale).tickFormat(d3.timeFormat("%Y"));
     const yAxis = d3.axisLeft(yScale).tickFormat(d3.timeFormat("%M:%S"));
 
@@ -129,13 +135,42 @@ function App() {
       .attr("transform", `translate(${padding - 10}, 0)`)
       .call(yAxis);
 
-    svg
-      .append("g")
-      .attr("id", "legend")
+    //creating legends
+    const legend = svg.append("g").attr("id", "legend");
+
+    // Legend for doping allegations
+    legend
+      .append("circle")
+      .attr("cx", width - 160)
+      .attr("cy", height / 1.5 - 17)
+      .attr("r", 6)
+      .attr("fill", "#e74c3c");
+
+    legend
       .append("text")
       .attr("x", width - 150)
-      .attr("y", height / 2)
-      .text("Doping Allegations");
+      .attr("y", height / 1.5 - 16)
+      .text("Doping Allegations")
+      .style("font-size", "0.9em")
+      .style("fill", "white")
+      .attr("alignment-baseline", "middle");
+
+    // Legend for no doping allegations
+    legend
+      .append("circle")
+      .attr("cx", width - 160)
+      .attr("cy", height / 1.5 + 11)
+      .attr("r", 6)
+      .attr("fill", "#3498db");
+
+    legend
+      .append("text")
+      .attr("x", width - 150)
+      .attr("y", height / 1.5 + 14)
+      .text("No Doping Allegations")
+      .style("font-size", "0.9em")
+      .style("fill", "white")
+      .attr("alignment-baseline", "middle");
   }, [data]);
 
   if (loading) {
